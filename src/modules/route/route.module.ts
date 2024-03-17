@@ -7,6 +7,7 @@ import { RouteController } from './route.controller'
 import { StationModule } from '../station/station.module'
 import { StationService } from '../station/station.service'
 
+
 @Module({
   imports: [
     MongooseModule.forFeature(models, DB_CONNECTION_NAME),
@@ -14,9 +15,12 @@ import { StationService } from '../station/station.service'
   ],
   providers: [
     RouteService,
-    StationService,
+    StationService
   ],
   controllers: [RouteController],
+  exports: [
+    RouteService
+  ],
 })
 export class RouteModule {
 }

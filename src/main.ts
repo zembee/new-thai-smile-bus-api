@@ -19,7 +19,7 @@ async function bootstrap() {
   const port = configService.get<number>('port')
   const logger = app.get(CWLogger)
   app.use(compression())
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true,transform: true }))
   app.useWebSocketAdapter(new RedisIoAdapter(app))
 
   // firebase admin setup

@@ -35,4 +35,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 /dist/
 .env
-yarn.lock
+*.zip
+/backup/

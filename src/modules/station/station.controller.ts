@@ -12,7 +12,9 @@ import {
 import { CommonResponse } from '../../decorators/common-response.decorator'
 import { StationService } from './station.service'
 import StationListResponseDto from './document/station-list-response.dto'
+import StationLinearResponseDto from './document/station-linear-response.dto'
 import StationListDto from './dto/station-list.dto'
+import StationLinearDto from './dto/linear-station.dto'
 import { FilterQuery } from 'mongoose'
 import {
   Station,
@@ -21,13 +23,13 @@ import {
 import StationResponseDto from './document/station-response.dto'
 import { StationTransformPipe } from './pipe/station-transform.pipe'
 
-const Module = 'Station'
 
+const Module = 'Station'
 
 @Controller('station')
 export class StationController {
   @Inject() private readonly stationService: StationService
-
+  
   @Get('')
   @ApiOperation({ 'summary': 'รายการป้าย' })
   @CommonResponse(Module, { successType: StationListResponseDto })
@@ -63,6 +65,22 @@ export class StationController {
     }
 
     return this.stationService.getModel().find(query).limit(quantity ?? 0).lean()
+  }
+
+  /////20230420
+  @Get('stationlinear')
+  @ApiOperation({ 'summary':'station linear' })
+  @CommonResponse(Module, { successType: [StationLinearResponseDto] })
+  async StationLinearList(
+    @Query() query: StationLinearDto,
+  ): Promise<any> {
+    const {
+      station,
+      route,
+    } = query
+
+      const routes = await this.stationService.getStationLinear(station,route)
+      return routes
   }
 
   @Get(':objectId')

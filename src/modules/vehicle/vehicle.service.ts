@@ -122,10 +122,10 @@ export class VehicleService {
           'route.objectId': 1,
           distance: 1,
           number: 1,
-	  name: 1,
+          name: 1,
           registerNumber: 1,
           'gpsDataReference.course': 1,
-	  'route.name': 1,
+          'route.name': 1,
         },
       },
       {
@@ -134,4 +134,314 @@ export class VehicleService {
     ])
     return vehicles
   }
+
+  // new
+  async getVehicleRouteRadius2<T>(
+    objectId: string,
+    lat: number,
+    long: number,
+    minRadius: number,
+    maxRadius: number,
+  ): Promise<T[]> {
+    const vehicles = await this.vehicleModel.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          distanceField: 'distance',
+          maxDistance: maxRadius,
+          minDistance: minRadius,
+          spherical: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'route',
+          localField: 'route',
+          foreignField: 'objectId',
+          as: 'routes',
+        },
+      },
+      {
+        $unwind: '$routes',
+      },
+      {
+        $lookup: {
+          from: 'station',
+          localField: 'routes.stations.objectId',
+          foreignField: 'objectId',
+          as: 'routes.stationss',
+        },
+      },
+      {
+        $unwind: {
+          path: '$routes.stations',
+        },
+      },
+      {
+        $unwind: {
+          path: '$routes.stationss',
+        },
+      },
+      {
+        $redact: {
+          $cond: [
+            {
+              $eq: ['$routes.stations.objectId', '$routes.stationss.objectId'],
+            },
+            '$$KEEP',
+            '$$PRUNE',
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          routeStatus: 1,
+          engineStatus: 1,
+          speed: 1,
+          latestActive: 1,
+          objectId: 1,
+          location: 1,
+          distance: 1,
+          number: 1,
+          name: 1,
+          registerNumber: 1,
+          'gpsDataReference.course': 1,
+          routes: {
+            objectId: '$routes.objectId',
+            name: '$routes.name',
+            status: '$routes.status',
+            description: '$routes.description',
+            stations: {
+              objectId: '$routes.stations.objectId',
+              type: '$routes.stations.type',
+              distanceDepot: '$routes.stations.distanceDepot',
+              typeStation: '$routes.stations.typeStation',
+              objectIds: '$routes.stationss.objectId',
+              location: '$routes.stationss.location',
+              name: '$routes.stationss.name',
+              status: '$routes.stationss.status',
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            _id: '$_id',
+            routeStatus: '$routeStatus',
+            engineStatus: '$engineStatus',
+            speed: '$speed',
+            latestActive: '$latestActive',
+            objectId: '$objectId',
+            location: '$location',
+            distance: '$distance',
+            number: '$number',
+            name: '$name',
+            registerNumber: '$registerNumber',
+            gpsDataReference: {
+              course: '$gpsDataReference.course',
+            },
+          },
+          routes: {
+            $push: '$routes',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: '$_id._id',
+          routeStatus: '$_id.routeStatus',
+          engineStatus: '$_id.engineStatus',
+          speed: '$_id.speed',
+          latestActive: '$_id.latestActive',
+          objectId: '$_id.objectId',
+          location: '$_id.location',
+          distance: '$_id.distance',
+          number: '$_id.number',
+          name: '$_id.name',
+          registerNumber: '$_id.registerNumber',
+          gpsDataReference: '$_id.gpsDataReference',
+          routes: '$routes',
+        },
+      },
+      {
+        $match: {
+          'routes.stations.status': 'active',
+          'routes.stations.objectId': objectId,
+        },
+      },
+      {
+        $sort: {
+          'routes.objectId': 1,
+          distance: 1,
+        },
+      },
+    ])
+
+    return vehicles
+  }
+
+  //20230419
+  async getVehicleRouteStationRadius<T>(
+    objectId: string,
+    lat: number,
+    long: number,
+    minRadius: number,
+    maxRadius: number,
+    objectIdRoute: string[],
+  ): Promise<T[]> {
+    const vehicles = await this.vehicleModel.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          distanceField: 'distance',
+          maxDistance: maxRadius,
+          minDistance: minRadius,
+          spherical: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'route',
+          localField: 'route',
+          foreignField: 'objectId',
+          as: 'routes',
+        },
+      },
+      {
+        $unwind: '$routes',
+      },
+      {
+        $lookup: {
+          from: 'station',
+          localField: 'routes.stations.objectId',
+          foreignField: 'objectId',
+          as: 'routes.stationss',
+        },
+      },
+      {
+        $unwind: {
+          path: '$routes.stations',
+        },
+      },
+      {
+        $unwind: {
+          path: '$routes.stationss',
+        },
+      },
+      {
+        $redact: {
+          $cond: [
+            {
+              $eq: ['$routes.stations.objectId', '$routes.stationss.objectId'],
+            },
+            '$$KEEP',
+            '$$PRUNE',
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          routeStatus: 1,
+          engineStatus: 1,
+          speed: 1,
+          latestActive: 1,
+          objectId: 1,
+          location: 1,
+          distance: 1,
+          number: 1,
+          name: 1,
+          registerNumber: 1,
+          'gpsDataReference.course': 1,
+          routes: {
+            objectId: '$routes.objectId',
+            name: '$routes.name',
+            status: '$routes.status',
+            description: '$routes.description',
+            stations: {
+              objectId: '$routes.stations.objectId',
+              type: '$routes.stations.type',
+              distanceDepot: '$routes.stations.distanceDepot',
+              typeStation: '$routes.stations.typeStation',
+              objectIds: '$routes.stationss.objectId',
+              location: '$routes.stationss.location',
+              name: '$routes.stationss.name',
+              status: '$routes.stationss.status',
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            _id: '$_id',
+            routeStatus: '$routeStatus',
+            engineStatus: '$engineStatus',
+            speed: '$speed',
+            latestActive: '$latestActive',
+            objectId: '$objectId',
+            location: '$location',
+            distance: '$distance',
+            number: '$number',
+            name: '$name',
+            registerNumber: '$registerNumber',
+            gpsDataReference: {
+              course: '$gpsDataReference.course',
+            },
+          },
+          routes: {
+            $push: '$routes',
+          },
+        },
+      },
+      {
+        $project: {
+          _id: '$_id._id',
+          routeStatus: '$_id.routeStatus',
+          engineStatus: '$_id.engineStatus',
+          speed: '$_id.speed',
+          latestActive: '$_id.latestActive',
+          objectId: '$_id.objectId',
+          location: '$_id.location',
+          distance: '$_id.distance',
+          number: '$_id.number',
+          name: '$_id.name',
+          registerNumber: '$_id.registerNumber',
+          gpsDataReference: '$_id.gpsDataReference',
+          routes: '$routes',
+        },
+      },
+      {
+        $match: {
+          'routes.stations.status': 'active',
+          'routes.stations.objectId': objectId,
+          '$and': [
+            {
+              'routes.objectId': {
+                '$exists': true, 
+                '$in': objectIdRoute
+              }
+            }
+          ]
+        },
+      },
+      {
+        $sort: {
+          'routes.objectId': 1,
+          distance: 1,
+        },
+      },
+    ])
+
+    return vehicles
+  }
+
 }

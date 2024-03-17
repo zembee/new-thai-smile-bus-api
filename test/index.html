@@ -30,18 +30,21 @@
       </p>
     </div>
     <script>
-      // let url = "wss://app-tsb.thaismilebus.com"; // Production
+      //http://127.0.0.1:5500/index.html
+
+      let url = "wss://app-tsb.thaismilebus.com"; // Production
       // let url = "wss://tsb.minerta2go.com";
-      let url = 'ws://localhost:3000/';
+      // let url = 'ws://localhost:3000/'
+      // let url = 'ws://192.168.11.128:3000/';
       let app = new Vue({
-        el: "#v-app",
+        el: '#v-app',
         data: {
-          text: "",
-          message: "",
+          text: '',
+          message: '',
         },
         methods: {
           receiveMessage(msg) {
-            this.message = msg;
+            this.message = msg
           },
         },
         created() {
@@ -58,32 +61,32 @@
           // this.socket.emit('vehicle:location', 'bus')  // bus taxi van
 
           this.socket = io(url, {
-            transports: ["websocket"],
-            path: "/ws/vehicle",
+            transports: ['websocket'],
+            path: '/ws/vehicle',
             query: {},
-          });
+          })
 
-          this.socket.on("connect", () => {
-            console.log("socket ==>", this.socket);
-            console.log("socket id ==>", this.socket.id);
-          });
+          this.socket.on('connect', () => {
+            console.log('socket ==>', this.socket)
+            console.log('socket id ==>', this.socket.id)
 
-          this.socket.on("vehicle:route", (msg) => {
-            console.log(msg);
-            this.receiveMessage(msg);
-          });
- 
-          this.socket.emit("vehicle:route", {
+            this.socket.on('vehicle:route', msg => {
+              console.log(msg)
+              this.receiveMessage(msg)
+            })
+
+            this.socket.emit('vehicle:route', {
               roomNo: `${this.socket.id}`,
-              objectId: "KeliOKPFxpdrOSh97JLez",
-              lats: "13.797258",
-              lons: "100.551084",
+              objectId: 't1sBVsau1WsRw2Qd06RyB',
+              lats: '13.974818',
+              lons: '100.618277',
               minRadius: 1,
-              maxRadius: 1000 * 10,
+              maxRadius: 1000 * 20,
               intervalTime: 1000 * 10,
-            });
+            })
+          })
         },
-      });
+      })
     </script>
   </body>
 </html>

@@ -73,5 +73,23 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
   Nest is [MIT licensed](LICENSE).
-# all-new-thai-smile-bus-api
-# new-thai-smile-bus-api
+
+## Deploy thai-smile-bus-api-cluster
+```bash
+- pm2 ls
+- pm2 stop thai-smile-bus-api-cluster
+
+ออกไปเปลี่ยนสิทธิ์ เป็น root
+- sudo chown -R tsb .
+- ใส password Tsb@2021
+- cd thai-smile-bus-api-cluster/src
+- เปิด Xftp[logo สีเขียว]
+- แล้ว copy ที่เราแก้ไปวางได้เลย
+- npm run start:dev [รันดูว่ามี error ไหม ถ้าไม่มี Ctrl+c ]
+- sudo -i
+- cd ..
+- cd home/tsb/thai-smile-bus-api-cluster/src
+- npm run build
+- exit
+- pm2 restart thai-smile-bus-api-cluster
+```

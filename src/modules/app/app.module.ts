@@ -30,7 +30,7 @@ import { FeedbackModule } from '../feedback/feedback.module'
       imports: [ConfigModule],
       inject: [ConfigService],
       connectionName: DB_CONNECTION_NAME,
-      useFactory: async(configService: ConfigService) => {
+      useFactory: async (configService: ConfigService) => {
         let mongoUri
         if (['testing', 'test'].includes(process.env.NODE_ENV)) {
           // eslint-disable-next-line @typescript-eslint/no-var-requires

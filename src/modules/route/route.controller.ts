@@ -6,6 +6,7 @@ import {
   HttpCode,
   Inject,
   Param,
+  Query,
   Post,
   Put,
   UseGuards,
@@ -27,6 +28,8 @@ import CreateRouteDto from './dto/create-route.dto'
 import sortBy from 'lodash/sortBy'
 import RouteDestinationDto from './dto/route-destination.dto'
 import RouteStationResponseDto from './document/route-station-response.dto'
+import RouteSwitchDto from './dto/route-switch.dto'
+import RouteSwitchResponseDto from './document/route-switch-response.dto'
 import { FilterQuery } from 'mongoose'
 
 const Module = 'Route'
@@ -65,16 +68,21 @@ export class RouteController {
     const { objectId = null } = body
     //const query: any = {}
     const query: FilterQuery<Route> = { status:  'active'  }
-    if (objectId) {
-      query['stations.objectId'] = objectId
+
+    //20230410
+    //if (objectId) {
+      //query['stations.objectId'] = objectId
       //query['stations.status'] = 'active'
-    }
-    return this.routeService
-      .getModel()
-      .find(query)
-      .select({ _id: 0, objectId: 1, status:1,name: 1, description: 1, stations: 1 })
-      .sort({ name: 1 })
-      .lean()
+    //}
+    
+    // return this.routeService
+    //   .getModel()
+    //   .find(query)
+    //   .select({ _id: 0, objectId: 1, status:1,name: 1, description: 1, stations: 1 })
+    //   .sort({ name: 1 })
+    //   .lean()
+    const route = await this.routeService.findRouteStaion(objectId)
+    return route
   }
 
   @HttpCode(200)
@@ -128,6 +136,48 @@ export class RouteController {
     return routes
   }
 
+  /////20230324
+  @HttpCode(200)
+  @Get('search')
+  @ApiOperation({ 'summary':'รายการเส้นทาง (จาก สถานีต้นทาง - ปลายทาง)' })
+  @CommonResponse(Module, { successType: [RouteDestinationDto] })
+  async routeOriginDestinationList(
+    @Query() query: RouteDestinationDto,
+  ): Promise<any> {
+    const {
+      origin,
+      destination,
+    } = query
+
+      const route = await this.routeService.findinObjectId(origin,destination)
+      return route
+  }
+
+  /////20230419
+  @HttpCode(200)
+  @Get('routeswitch')
+  @ApiOperation({ 'summary':'switch สายรถ' })
+  @CommonResponse(Module, { successType: [RouteSwitchResponseDto] })
+  async routeSwitchList(
+    @Query() query: RouteSwitchDto,
+    routeArray : string[],
+  ): Promise<any> {
+    
+    const {
+      stations,
+      routes ,
+    } = query
+
+    if(!Array.isArray(routes)){
+      routeArray = Array(routes);
+    }else{
+      routeArray =routes;
+    }
+        
+    const route = await this.routeService.findRouteStaionSwitch(stations,routeArray)
+    return route
+  }
+
   @Get(':objectId')
   @ApiOperation({ 'summary': 'ข้อมูลเส้นทาง' })
   @CommonResponse(Module, { successType: RouteResponseDto })
@@ -156,4 +206,9 @@ export class RouteController {
       return route
     }
   }
+
+
+
 }
+
+
