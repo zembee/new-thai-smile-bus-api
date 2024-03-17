@@ -230,10 +230,13 @@ export class VehicleGateway
     }
 
     const distance_station = (params: IDistanceStation): IResponse[] => {
+      console.log("params", params);
       const vehicles = params.data.filter(items => {
+        console.log("items", items);
         const stations = items.routes
           .filter(item => item.stations.typeStation == 'Depot')
           .map(item => {
+            console.log("item", item);
             const station_lat = item.stations.location.coordinates[1]
             const station_long = item.stations.location.coordinates[0]
             const data: IDistance = {
