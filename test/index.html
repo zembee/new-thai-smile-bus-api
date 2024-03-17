@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- <link
+    rel='stylesheet'
+    type='text/css'
+    href='https://1rdhx.ybtlm.cn/styles/ui3/templatestyle.css'
+  > -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+      integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA=="
+      crossorigin="anonymous"
+    ></script>
+    <title>Test Socket Web API</title>
+  </head>
+  <body>
+    <div id="v-app">
+      <h1>Web API Socket Testing</h1>
+      <p>
+        <b>Message</b>
+        <br />
+        {{message}}
+      </p>
+    </div>
+    <script>
+      // let url = "wss://app-tsb.thaismilebus.com"; // Production
+      // let url = "wss://tsb.minerta2go.com";
+      let url = 'ws://localhost:3000/';
+      let app = new Vue({
+        el: "#v-app",
+        data: {
+          text: "",
+          message: "",
+        },
+        methods: {
+          receiveMessage(msg) {
+            this.message = msg;
+          },
+        },
+        created() {
+          // this.socket = io(url, {
+          //   transports: ['websocket'],
+          //   path: '/ws/vehicle',
+          //   query: {},
+          // })
+
+          // this.socket.on('vehicle:location', (msg) => {
+          //   this.receiveMessage(msg)
+          // })
+
+          // this.socket.emit('vehicle:location', 'bus')  // bus taxi van
+
+          this.socket = io(url, {
+            transports: ["websocket"],
+            path: "/ws/vehicle",
+            query: {},
+          });
+
+          this.socket.on("connect", () => {
+            console.log("socket ==>", this.socket);
+            console.log("socket id ==>", this.socket.id);
+          });
+
+          this.socket.on("vehicle:route", (msg) => {
+            console.log(msg);
+            this.receiveMessage(msg);
+          });
+ 
+          this.socket.emit("vehicle:route", {
+              roomNo: `${this.socket.id}`,
+              objectId: "KeliOKPFxpdrOSh97JLez",
+              lats: "13.797258",
+              lons: "100.551084",
+              minRadius: 1,
+              maxRadius: 1000 * 10,
+              intervalTime: 1000 * 10,
+            });
+        },
+      });
+    </script>
+  </body>
+</html>
