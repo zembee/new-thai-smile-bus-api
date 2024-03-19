@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "tslint:latest"
+  ],
+  "rules": {
+    "no-unused-vars": false,
+    "no-unused-variable": true,
+    "no-implicit-dependencies": false,
+    "no-object-literal-type-assertion": false,
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "no-console": true,
+    "no-submodule-imports": false
+  }
+}
