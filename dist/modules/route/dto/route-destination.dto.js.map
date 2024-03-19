@@ -1,0 +1,1 @@
+{"version":3,"file":"route-destination.dto.js","sourceRoot":"","sources":["../../../../src/modules/route/dto/route-destination.dto.ts"],"names":[],"mappings":";;;;;;;;;;;AAAA,6CAA6C;AAC7C,qDAA4C;AAE5C,MAAqB,mBAAmB;CAYvC;AAPC;IAJC,qBAAW,CAAC;QACX,IAAI,EAAE,MAAM;KACb,CAAC;IACD,4BAAU,EAAE;;mDACC;AAMd;IAJC,qBAAW,CAAC;QACX,IAAI,EAAE,MAAM;KACb,CAAC;IACD,4BAAU,EAAE;;wDACM;AAXrB,sCAYC"}
