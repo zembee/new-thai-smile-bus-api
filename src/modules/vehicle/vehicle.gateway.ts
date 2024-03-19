@@ -197,18 +197,14 @@ export class VehicleGateway
         routeArray,
       )
 
-      
-      console.log("vehicles", vehicles);
-
       const params: IDistanceStation = {
         lats: parseFloat(data.lats),
         lons: parseFloat(data.lons),
         data: vehicles,
       }
-      
-      console.log("IDistanceStation params", params);
 
       const result = distance_station(params)
+      console.log("result", result);
       result.map(item => {
         // const speedPerHour = 40
         const speedPerHour = item.speed > 20 ? item.speed : 20
@@ -233,6 +229,7 @@ export class VehicleGateway
 
       this.emit('vehicle:routetransport', data.roomNo, result)
     }
+
     const distance_station = (params: IDistanceStation): IResponse[] => {
       console.log("params", params);
       const vehicles = params.data.filter(items => {

@@ -294,19 +294,6 @@ export class VehicleService {
     maxRadius: number,
     objectIdRoute: string[],
   ): Promise<T[]> {
-
-
-    // objectId =  'Jl_DBRol_rovjNXAGELqe' 
-    // lat = 13.926241 
-    // long = 100.462194
-    // minRadius = 1 ; 
-    // maxRadius = 10000 
-    // objectIdRoute = ["x7vPrlezv2vc9c3-inof5"]
-
-
-    const data = [objectId,lat,long,minRadius,maxRadius,objectIdRoute] ;
-      console.log("data", data);
-
     const vehicles = await this.vehicleModel.aggregate([
       {
         $geoNear: {
