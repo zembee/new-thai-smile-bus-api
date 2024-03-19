@@ -3022,7 +3022,7 @@
         "affectsGlobalScope": false
       },
       "../src/modules/vehicle/vehicle.service.ts": {
-        "version": "4ae543308ec5f05d0a2b8eefa1cc94b1580a84401d22e7a76d51e58f72b2e38d",
+        "version": "140d7b77bc11a525736b7f26a118b29be673e289c7493810991903e0d6928e02",
         "signature": "ba3b0269314e4c7f1cf68d88647af9b4830787e34f52cc5549df1369e4265bf9",
         "affectsGlobalScope": false
       },
@@ -3512,7 +3512,7 @@
         "affectsGlobalScope": false
       },
       "../src/modules/vehicle/vehicle.gateway.ts": {
-        "version": "8cd2b6c30936ae4df4e812ffabfe2899541b5a66947daa67e7e213ffbab9170e",
+        "version": "edb3a8f17b0623096747b0e6366c04da0a8bab0bf64521ff0cb4131fc7407386",
         "signature": "323b0d06aa3305b6cc179bc7f76edff560f4047082734057611200dde8c481f5",
         "affectsGlobalScope": false
       },

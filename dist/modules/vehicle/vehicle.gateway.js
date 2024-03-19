@@ -69,11 +69,13 @@ let VehicleGateway = VehicleGateway_1 = class VehicleGateway {
                 routeArray = data.objectIdRoute;
             }
             const vehicles = await this.vehicleService.getVehicleRouteStationRadius(data.objectId, parseFloat(data.lats), parseFloat(data.lons), data.minRadius, data.maxRadius, routeArray);
+            console.log("vehicles", vehicles);
             const params = {
                 lats: parseFloat(data.lats),
                 lons: parseFloat(data.lons),
                 data: vehicles,
             };
+            console.log("vehicles", vehicles);
             const result = distance_station(params);
             result.map(item => {
                 const speedPerHour = item.speed > 20 ? item.speed : 20;
@@ -94,7 +96,6 @@ let VehicleGateway = VehicleGateway_1 = class VehicleGateway {
         const distance_station = (params) => {
             console.log("params", params);
             const vehicles = params.data.filter(items => {
-                console.log("items", items);
                 console.log("vehicles", vehicles);
                 const stations = items.routes
                     .filter(item => item.stations.typeStation == 'Depot')

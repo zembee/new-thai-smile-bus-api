@@ -115,6 +115,7 @@ let VehicleService = VehicleService_1 = class VehicleService {
                 $sort: { 'route.objectId': 1, distance: 1 },
             },
         ]);
+        console.log("vehicles", vehicles);
         return vehicles;
     }
     async getVehicleRouteRadius2(objectId, lat, long, minRadius, maxRadius) {
@@ -405,6 +406,7 @@ let VehicleService = VehicleService_1 = class VehicleService {
                 },
             },
         ]);
+        console.log("vehicles cc", vehicles);
         return vehicles;
     }
 };
